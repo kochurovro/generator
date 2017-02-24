@@ -1,6 +1,3 @@
-// sorter.cpp: определяет точку входа для консольного приложения.
-//
-
 #include "stdafx.h"
 #include <fstream>
 #include <iostream>
@@ -10,12 +7,10 @@
 #include <cctype>
 #include <algorithm>
 #include <map>
-
 using namespace std;
 
-
-bool cmp(const std::pair<string, int>& first,
-	const std::pair<string, int>& second)
+bool cmp(const pair<string, int>& first,
+	const pair<string, int>& second)
 {
 	return first.second > second.second;
 }
@@ -28,55 +23,54 @@ int main()
 	cin >> name_file;
 	string path_input = name_file + ".txt";
 	ifstream fin(path_input);
-	int ch = 0;
-	string s;
-	vector<string> v;
+	int inputCH = 0;
+	string word;
+	vector<string> words;
 
 	if (!fin.is_open())
 	{
-		cout << "Файл " << path_input <<"не может быть открыт!\n";
+		cout << "File " << path_input <<"can't be opened!\n";
 		return 0;
 	}
 	else
 	{
-		while ((ch = fin.get()) != EOF)
+		while ((inputCH = fin.get()) != EOF)
 		{
-			if (isalpha(unsigned char(ch)))
-				s += char(ch);
-			else if (!s.empty())
+			if (isalpha(unsigned char(inputCH)))
+				word += char(inputCH);
+			else if (!word.empty())
 			{
-				v.push_back(s);
-				s.clear();
+				words.push_back(word);
+				word.clear();
 			}
 		}
-		if (!s.empty())
+		if (!word.empty())
 		{
-			v.push_back(s);
-			s.clear();
+			words.push_back(word);
+			word.clear();
 		}
 	}
 	fin.close();
 
-	sort(v.begin(), v.end());
-	map <string, int> table;
+	sort(words.begin(), words.end());
+	map <string, int> numberOfWords;
 	map<string, int>::iterator it;
-	for (int i = 0; i < v.size(); i++)
+	for (const auto w : words)
 	{
-		it = table.find(v[i]);
-		if (it == table.end())
-			table.insert(pair<string, int>(v[i], 1));
+		it = numberOfWords.find(w);
+		if (it == numberOfWords.end())
+			numberOfWords.insert(pair<string, int>(w, 1));
 		else
 			it->second++;
 	}
-	vector<pair<string, int>> vec(table.begin(),table.end());
-	sort(vec.begin(), vec.end(), cmp);
+	vector<pair<string, int>> vectorNumberOfWords(numberOfWords.begin(), numberOfWords.end());
+	sort(vectorNumberOfWords.begin(), vectorNumberOfWords.end(), cmp);
 	cout << "Name output file: ";
 	cin >> name_file;
 	path_input = name_file + ".txt";
 	ofstream fout(path_input);
-	for (const auto p : vec)
-		fout << p.second << ' ' << p.first << endl;
+	for (const auto now : vectorNumberOfWords)
+		fout << now.second << ' ' << now.first << endl;
 	fout.close();
 	return 0;
 }
-
