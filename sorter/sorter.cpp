@@ -42,9 +42,7 @@ int main()
 		while ((ch = fin.get()) != EOF)
 		{
 			if (isalpha(unsigned char(ch)))
-			{
 				s += char(ch);
-			}
 			else if (!s.empty())
 			{
 				v.push_back(s);
@@ -77,9 +75,7 @@ int main()
 	path_input = name_file + ".txt";
 	ofstream fout(path_input);
 	for (const auto p : vec)
-	{
 		fout << p.second << ' ' << p.first << endl;
-	}
 	fout.close();
 	return 0;
 }
